@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha -r ts-node/register src/**/*.tests.ts",
+    "clean": "rimraf www/ || true",
     "dev": "ts-node-dev ./src/server.ts",
+    "build": "npm run clean && tsc && cp package.json www/package.json && mkdir www/tmp/ && cd www && zip -r Archive.zip . && cd ..",
     "tsc": "tsc"
   },
   "repository": {
@@ -30,7 +32,7 @@
     "ts-node": "^8.10.2",
     "ts-node-dev": "^1.1.1",
     "tslint": "^5.20.1",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.10"
   },
   "dependencies": {
     "express": "^4.17.1"

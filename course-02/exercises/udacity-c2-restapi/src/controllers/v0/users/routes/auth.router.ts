@@ -6,6 +6,8 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { NextFunction } from 'connect';
 
+import {config } from '../../../../config/config'
+
 import * as EmailValidator from 'email-validator';
 
 const router: Router = Router();
