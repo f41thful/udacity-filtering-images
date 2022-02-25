@@ -7,6 +7,8 @@ import bodyParser from 'body-parser';
 
 import { V0MODELS } from './controllers/v0/model.index';
 
+require('dotenv').config();
+
 (async () => {
   console.log("Starting the program");
 
