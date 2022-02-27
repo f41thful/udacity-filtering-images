@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
 const file_not_found = 'ENOENT';
+const host_not_found = 'ENOTFOUND';
 
 (async () => {
 
@@ -45,13 +46,17 @@ const file_not_found = 'ENOENT';
         console.log("Deleting image stored at " + image_path);
         deleteLocalFiles([image_path]);
       });
-    } catch (error) {
+    } catch (error: unknown) {      
       const casted_error = error as Error;
+      console.log("There was an error when fulfilling the request. " + error);
+      
       if(casted_error.code === file_not_found) {
         return res.status(404).send("The file does not exist [" + image_url + "]");
+      } else if(casted_error.code === host_not_found) {
+        return res.status(400).send("The host does not exist. Did you properly write it?");
+      } else {
+        return res.status(500).send("There was an error fulfilling your request. " + error);
       }
-  
-      return res.status(500).send("There was an error fulfilling your request. " + error);
     }
   });
 
