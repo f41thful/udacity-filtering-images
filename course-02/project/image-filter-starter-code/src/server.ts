@@ -2,6 +2,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
+const file_not_found = 'ENOENT';
+
 (async () => {
 
   // Init the Express application
@@ -36,6 +38,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
     try {
       const image_path = await filterImageFromURL(image_url);
+
       console.log("Storing filtered image at " + image_path);
 
       res.status(200).sendFile(image_path, () => {
@@ -43,6 +46,11 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
         deleteLocalFiles([image_path]);
       });
     } catch (error) {
+      const casted_error = error as Error;
+      if(casted_error.code === file_not_found) {
+        return res.status(404).send("The file does not exist [" + image_url + "]");
+      }
+  
       return res.status(500).send("There was an error fulfilling your request. " + error);
     }
   });
@@ -62,3 +70,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
       console.log( `press CTRL+C to stop server` );
   } );
 })();
+
+class Error {
+  code: string
+}
