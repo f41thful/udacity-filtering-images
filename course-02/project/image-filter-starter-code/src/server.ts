@@ -35,7 +35,13 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     }
 
     try {
-      return res.sendFile(await filterImageFromURL(image_url));
+      const image_path = await filterImageFromURL(image_url);
+      console.log("Storing filtered image at " + image_path);
+
+      res.status(200).sendFile(image_path, () => {
+        console.log("Deleting image stored at " + image_path);
+        deleteLocalFiles([image_path]);
+      });
     } catch (error) {
       return res.status(500).send("There was an error fulfilling your request. " + error);
     }
