@@ -46,7 +46,7 @@ const host_not_found = 'ENOTFOUND';
         console.log("Deleting image stored at " + image_path);
         deleteLocalFiles([image_path]);
       });
-    } catch (error: unknown) {      
+    } catch (error) {      
       const casted_error = error as Error;
       console.log("There was an error when fulfilling the request. " + error);
       
